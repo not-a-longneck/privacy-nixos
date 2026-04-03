@@ -2,9 +2,9 @@
 # Privacy NixOS Installer - Run from NixOS live USB
 set -euo pipefail
 
-GITHUB_REPO="YOUR_USERNAME/privacy-nixos"  # Change this to your GitHub repo
-BOOT_DISK="/dev/vdb"  # 512MB disk for boot
-NIX_DISK="/dev/vdc"   # 20-30GB disk for nix store
+GITHUB_REPO="not-a-longneck/privacy-nixos"  # Change this to your GitHub repo
+BOOT_DISK="/dev/vda"  # 512MB disk for boot
+NIX_DISK="/dev/vdb"   # 20-30GB disk for nix store
 
 echo "============================================"
 echo "Privacy-Focused NixOS Installer"
