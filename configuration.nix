@@ -32,17 +32,6 @@ imports = [
   security.audit.enable = false;
   security.auditd.enable = false;
 
-  # Clear any residual logs
-  systemd.services.clear-log-dirs = {
-    description = "Clear log directories";
-    wantedBy = [ "multi-user.target" ];
-    before = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.coreutils}/bin/rm -rf /var/log";
-    };
-  };
-
   # ============================================================================
   # PRIVACY: NO CRASH DUMPS OR CORE FILES
   # ============================================================================
