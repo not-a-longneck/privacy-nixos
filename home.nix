@@ -18,7 +18,6 @@
   xdg.configFile."thumbnailers/disable.thumbnailer".text = "";
 
   # Redirect thumbnail cache to tmpfs (will be wiped on reboot)
-  home.file.".cache/.keep".text = "";
   home.file.".thumbnails/.keep".text = "";
 
   # ============================================================================
