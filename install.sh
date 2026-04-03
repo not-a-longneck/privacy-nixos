@@ -71,16 +71,7 @@ mount --bind /mnt/nix/persist/etc/nixos /mnt/etc/nixos
 echo "✓ Filesystems mounted"
 
 # ============================================================================
-# Generate Hardware Configuration
-# ============================================================================
-
-echo ""
-echo "Generating hardware configuration..."
-nixos-generate-config --root /mnt
-echo "✓ Hardware config generated"
-
-# ============================================================================
-# Fetch Configuration from GitHub
+# Fetch Configuration from GitHub FIRST
 # ============================================================================
 
 echo ""
@@ -95,6 +86,63 @@ for file in flake.nix configuration.nix home.nix; do
 done
 
 echo "✓ Configuration fetched"
+
+# ============================================================================
+# Generate Hardware Configuration
+# ============================================================================
+
+echo ""
+echo "Generating hardware configuration..."
+
+# Generate hardware config - this will detect our mounted filesystems
+nixos-generate-config --root /mnt --no-filesystems
+
+# Now manually create the hardware-configuration.nix with our filesystems
+cat > /mnt/etc/nixos/hardware-configuration.nix << 'HWEOF'
+{ config, lib, pkgs, modulesPath, ... }:
+
+{
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+
+  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
+
+  # Root on tmpfs - wiped every boot
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=4G" "mode=755" ];
+  };
+
+  # Boot partition (EFI)
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/BOOT";
+    fsType = "vfat";
+  };
+
+  # Persistent storage for nix store
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-label/NIX";
+    fsType = "ext4";
+    neededForBoot = true;
+  };
+
+  # Bind mount for /etc/nixos persistence
+  fileSystems."/etc/nixos" = {
+    device = "/nix/persist/etc/nixos";
+    fsType = "none";
+    options = [ "bind" ];
+  };
+
+  swapDevices = [ ];
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+}
+HWEOF
+
+echo "✓ Hardware config generated"
 
 # ============================================================================
 # Set Password

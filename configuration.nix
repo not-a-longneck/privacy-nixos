@@ -2,37 +2,11 @@
 
 {
   # ============================================================================
-  # BOOT & FILESYSTEM
+  # BOOT
   # ============================================================================
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Root on tmpfs - wiped every boot
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [ "defaults" "size=4G" "mode=755" ];
-  };
-
-  # Boot partition (EFI)
-  fileSystems."/boot" = {
-    device = "/dev/vda";
-    fsType = "vfat";
-  };
-
-  # Persistent storage for nix store and config
-  fileSystems."/nix" = {
-    device = "/dev/vdb";
-    fsType = "ext4";
-    neededForBoot = true;
-  };
-
-  fileSystems."/etc/nixos" = {
-    device = "/nix/persist/etc/nixos";
-    options = [ "bind" ];
-    depends = [ "/nix" ];
-  };
 
   # ============================================================================
   # PRIVACY: DISABLE ALL LOGGING
@@ -127,7 +101,7 @@
   
   users.users.user = {
     isNormalUser = true;
-    hashedPassword = "$6$rounds=100000$CHANGEME";  # Generate with: mkpasswd -m sha-512
+    hashedPassword = "$6$CHANGEME";  # Will be replaced during install
     extraGroups = [ "wheel" "networkmanager" ];
     home = "/home/user";
   };
