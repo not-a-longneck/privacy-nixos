@@ -9,8 +9,8 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 GITHUB_REPO="not-a-longneck/privacy-nixos"  # Change this to your GitHub repo
-BOOT_DISK="/dev/vdb"  # 512MB disk for boot
-NIX_DISK="/dev/vdc"   # 20-30GB disk for nix store
+BOOT_DISK="/dev/vda"  # 512MB disk for boot
+NIX_DISK="/dev/vdb"   # 20-30GB disk for nix store
 
 echo "============================================"
 echo "Privacy-Focused NixOS Installer"
