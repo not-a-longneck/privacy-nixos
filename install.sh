@@ -77,13 +77,8 @@ echo "✓ Filesystems mounted"
 echo ""
 echo "Fetching configuration from GitHub..."
 
-cd /mnt/etc/nixos
-
-# Download config files
-for file in flake.nix configuration.nix home.nix; do
-    echo "  Downloading $file..."
-    curl -fsSL "https://raw.githubusercontent.com/$GITHUB_USER/$GITHUB_REPO/main/$file" -o "$file"
-done
+# Clone the entire repository directly into the nixos folder!
+git clone "https://github.com/$GITHUB_USER/$GITHUB_REPO.git" /mnt/etc/nixos
 
 echo "✓ Configuration fetched"
 
@@ -149,16 +144,6 @@ HASHED_PASSWORD=$(mkpasswd -m sha-512)
 sed -i "s|hashedPassword = \".*\";|hashedPassword = \"$HASHED_PASSWORD\";|" /mnt/etc/nixos/configuration.nix
 
 echo "✓ Password set"
-
-
-# ============================================================================
-# Make temp .git flake files
-# ============================================================================
-
-# Initialize git so the flake builder is happy!
-cd /mnt/etc/nixos
-git init
-git add .
 
 
 # ============================================================================
