@@ -61,7 +61,7 @@ echo "✓ Disks formatted"
 echo ""
 echo "Mounting filesystems..."
 
-mount -t tmpfs none /mnt
+mount -t tmpfs -o mode=755 none /mnt
 mkdir -p /mnt/{boot,nix,etc/nixos}
 mount "${BOOT_DISK}1" /mnt/boot
 mount "${NIX_DISK}1" /mnt/nix
