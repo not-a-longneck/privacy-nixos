@@ -94,24 +94,18 @@ echo "✓ Configuration fetched"
 echo ""
 echo "Generating hardware configuration..."
 
-# Generate hardware config - this will detect our mounted filesystems
+# Generate hardware config WITHOUT filesystems
 nixos-generate-config --root /mnt --no-filesystems
 
-# Now manually create the hardware-configuration.nix with our filesystems
-cat > /mnt/etc/nixos/hardware-configuration.nix << 'HWEOF'
-{ config, lib, pkgs, modulesPath, ... }:
+# Remove the final closing brace from the generated file so we can append
+sed -i '$ d' /mnt/etc/nixos/hardware-configuration.nix
 
-{
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-
-  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+# Safely append our custom filesystems and close the bracket!
+cat >> /mnt/etc/nixos/hardware-configuration.nix << 'HWEOF'
 
   # Root on tmpfs - wiped every boot
   fileSystems."/" = {
-    device = "none";
+    device = "tmpfs";
     fsType = "tmpfs";
     options = [ "defaults" "size=4G" "mode=755" ];
   };
@@ -120,6 +114,7 @@ cat > /mnt/etc/nixos/hardware-configuration.nix << 'HWEOF'
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/BOOT";
     fsType = "vfat";
+    options = [ "umask=0077" ];
   };
 
   # Persistent storage for nix store
@@ -132,13 +127,10 @@ cat > /mnt/etc/nixos/hardware-configuration.nix << 'HWEOF'
   # Bind mount for /etc/nixos persistence
   fileSystems."/etc/nixos" = {
     device = "/nix/persist/etc/nixos";
-    fsType = "none";
     options = [ "bind" ];
   };
 
   swapDevices = [ ];
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
 HWEOF
 
