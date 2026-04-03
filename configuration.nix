@@ -17,13 +17,13 @@
 
   # Boot partition (EFI)
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/BOOT";
+    device = "/dev/vda";
     fsType = "vfat";
   };
 
   # Persistent storage for nix store and config
   fileSystems."/nix" = {
-    device = "/dev/disk/by-label/NIX";
+    device = "/dev/vdb";
     fsType = "ext4";
     neededForBoot = true;
   };
