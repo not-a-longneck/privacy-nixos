@@ -15,8 +15,8 @@ fi
 
 GITHUB_USER="${1:-YOUR_USERNAME}"  # Pass as first argument or edit here
 GITHUB_REPO="${2:-privacy-nixos}"  # Pass as second argument or edit here
-BOOT_DISK="/dev/vdb"
-NIX_DISK="/dev/vdc"
+BOOT_DISK="/dev/vda"
+NIX_DISK="/dev/vdb"
 
 echo "============================================"
 echo "Privacy-Focused NixOS Installer (GitHub)"
