@@ -8,7 +8,7 @@ if [ "$EUID" -ne 0 ]; then
     exec sudo bash "$0" "$@"
 fi
 
-GITHUB_REPO="YOUR_USERNAME/privacy-nixos"  # Change this to your GitHub repo
+GITHUB_REPO="not-a-longneck/privacy-nixos"  # Change this to your GitHub repo
 BOOT_DISK="/dev/vdb"  # 512MB disk for boot
 NIX_DISK="/dev/vdc"   # 20-30GB disk for nix store
 
