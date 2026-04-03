@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  nix-save = pkgs.writeShellScriptBin "sys-update" ''
+  nix-save = pkgs.writeShellScriptBin "nix-save" ''
     echo "Fetching latest configs from GitHub..."
     cd /etc/nixos
     
@@ -17,5 +17,5 @@ let
   '';
 in
 {
-  environment.systemPackages = [ sys-update ];
+  environment.systemPackages = [ nix-save ];
 }
