@@ -160,8 +160,6 @@ cd /mnt/etc/nixos
 git init
 git add .
 
-nixos-install --flake /mnt/etc/nixos#privacy-vm
-
 
 # ============================================================================
 # Install NixOS
