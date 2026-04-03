@@ -150,6 +150,19 @@ sed -i "s|hashedPassword = \".*\";|hashedPassword = \"$HASHED_PASSWORD\";|" /mnt
 
 echo "✓ Password set"
 
+
+# ============================================================================
+# Make temp .git flake files
+# ============================================================================
+
+# Initialize git so the flake builder is happy!
+cd /mnt/etc/nixos
+git init
+git add .
+
+nixos-install --flake /mnt/etc/nixos#privacy-vm
+
+
 # ============================================================================
 # Install NixOS
 # ============================================================================
