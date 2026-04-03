@@ -150,6 +150,9 @@ echo "✓ Password set"
 # Install NixOS
 # ============================================================================
 
+cd /mnt/etc/nixos
+git add hardware-configuration.nix
+
 echo ""
 echo "Installing NixOS..."
 echo "This may take a while..."
