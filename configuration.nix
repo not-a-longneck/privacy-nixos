@@ -74,6 +74,13 @@ imports = [
     
     # Clean /tmp on boot (redundant with tmpfs but explicit)
     boot.tmp.cleanOnBoot = true;
+
+    # Garbage collection
+    nix.gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 14d";
+    };
     
     # Networking
     networking.hostName = "privacy-vm";
