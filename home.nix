@@ -100,7 +100,6 @@
       cifs-utils # for mounting network drives
       veracrypt
       kdePackages.kate
-      pyload-ng
     ];
 
   # Flatpaks
