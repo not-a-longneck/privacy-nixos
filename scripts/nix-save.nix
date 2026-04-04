@@ -10,7 +10,7 @@ nix-save = pkgs.writeShellScriptBin "nix-save" ''
     sudo git fetch origin main
     sudo git reset --hard origin/main
     sudo nix flake update
-    sudo nixos-rebuild switch --flake .#your-hostname
+    sudo nixos-rebuild switch --flake .#privacy-vm
   '';
 
 in
