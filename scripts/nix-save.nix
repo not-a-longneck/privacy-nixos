@@ -12,17 +12,17 @@ let
     echo "2. Updating dependencies..."
     sudo nix flake update
 
-    echo "3. Staging changes..."
-    sudo git add .
+    # echo "3. Staging changes..."
+    # sudo git add .
 
     echo "4. Rebuilding the system..."
     if sudo nixos-rebuild switch --flake "$CONFIG_DIR#privacy-vm"; then
         
         gen_num=$(readlink /nix/var/nix/profiles/system | cut -d- -f2)
         
-        echo "5. Saving and Syncing to GitHub..."
-        sudo git commit -m "Gen $gen_num: Update via nix-save $(date +'%Y-%m-%d %H:%M')"
-        sudo git push origin main
+        # echo "5. Saving and Syncing to GitHub..."
+        # sudo git commit -m "Gen $gen_num: Update via nix-save $(date +'%Y-%m-%d %H:%M')"
+        # sudo git push origin main
         
         echo "Successfully updated to Generation $gen_num and pushed to GitHub! 🎉"
     else
