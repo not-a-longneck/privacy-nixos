@@ -62,37 +62,45 @@ imports = [
     export HISTSIZE=0
   '';
 
-  # ============================================================================
-  # SYSTEM SETTINGS
-  # ============================================================================
+    # ============================================================================
+    # SYSTEM SETTINGS
+    # ============================================================================
+    
+    # Enable flakes
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    
+    # No swap (everything in RAM)
+    swapDevices = [ ];
+    
+    # Clean /tmp on boot (redundant with tmpfs but explicit)
+    boot.tmp.cleanOnBoot = true;
+    
+    # Networking
+    networking.hostName = "privacy-vm";
+    networking.networkmanager.enable = true;
+    
+    # VM guest tools
+    services.qemuGuest.enable = true;
+    services.spice-vdagentd.enable = true;
 
-  # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # No swap (everything in RAM)
-  swapDevices = [ ];
-
-  # Clean /tmp on boot (redundant with tmpfs but explicit)
-  boot.tmp.cleanOnBoot = true;
-
-  # Networking
-  networking.hostName = "privacy-vm";
-  networking.networkmanager.enable = true;
-
-  # VM guest tools
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
-
-  # Time zone
-  time.timeZone = "Europe/Copenhagen"; 
-
-  # Locale
-  i18n.defaultLocale = "en_DK.UTF-8";   # Select internationalisation properties.
+    # Time zone
+    time.timeZone = "Europe/Copenhagen"; 
 
 
-  # ============================================================================
-  # USER CONFIGURATION
-  # ============================================================================
+    # Locale
+    i18n.defaultLocale = "en_DK.UTF-8";   # Select internationalisation properties.
+    
+    # Configure keymap in X11
+    services.xserver.xkb = {
+        layout = "dk";
+        variant = "";
+    };
+    console.keyMap = "dk-latin1";
+
+    
+    # ============================================================================
+    # USER CONFIGURATION
+    # ============================================================================
 
   users.mutableUsers = false;
   
@@ -106,39 +114,39 @@ imports = [
   # Enable sudo
   security.sudo.wheelNeedsPassword = true;
 
-  # ============================================================================
-  # PACKAGES & SERVICES
-  # ============================================================================
+    # ============================================================================
+    # PACKAGES & SERVICES
+    # ============================================================================
+    
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
+    services.flatpak.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  services.flatpak.enable = true;
+    environment.systemPackages = with pkgs; [
+        git
+        wget
+        curl
+        htop
+    ];
+    
+    # ============================================================================
+    # DESKTOP ENVIRONMENT
+    # ============================================================================
 
-  environment.systemPackages = with pkgs; [
-    git
-    wget
-    curl
-    htop
-  ];
-
-  # ============================================================================
-  # DESKTOP ENVIRONMENT
-  # ============================================================================
-
-  # Enable the X11 windowing system
-  services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+    # Enable the X11 windowing system
+    services.xserver.enable = true;
+    
+    # Enable the KDE Plasma Desktop Environment
+    services.displayManager.sddm.enable = true;
+    services.desktopManager.plasma6.enable = true;
 
     xdg.portal.extraPortals = [ 
       pkgs.kdePackages.xdg-desktop-portal-kde 
     ];
 
-  # ============================================================================
-  # MOUNTS
-  # ============================================================================
+    # ============================================================================
+    # MOUNTS
+    # ============================================================================
 
     fileSystems."/mnt/tower/backups" = {
       device = "//192.168.1.53/backups";
