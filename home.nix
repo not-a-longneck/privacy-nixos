@@ -104,6 +104,7 @@
     ];
 
   # Flatpaks
+  xdg.portal.enable = true; # must be enabled for flatpaks to work
   services.flatpak = {
     enable = true;
     packages = [
