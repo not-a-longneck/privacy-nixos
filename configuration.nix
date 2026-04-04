@@ -84,10 +84,11 @@ imports = [
   services.spice-vdagentd.enable = true;
 
   # Time zone
-  time.timeZone = "UTC";
+  time.timeZone = "Europe/Copenhagen"; 
 
   # Locale
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_DK.UTF-8";   # Select internationalisation properties.
+
 
   # ============================================================================
   # USER CONFIGURATION
@@ -173,19 +174,7 @@ imports = [
     };
   };
 
-  # ============================================================================
-  # LOCALE OPTIONS
-  # ============================================================================
 
-  time.timeZone = "Europe/Copenhagen";   # Set your time zone.
-  i18n.defaultLocale = "en_DK.UTF-8";   # Select internationalisation properties.
-
-  # Configure keymap in X11
-  console.keyMap = "dk";
-  services.xserver.xkb = {
-    layout = "dk";
-    variant = "";
-  };
 
 
   # ============================================================================
