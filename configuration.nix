@@ -81,6 +81,9 @@ imports = [
         dates = "weekly";
         options = "--delete-older-than 14d";
     };
+
+    # delete duplicate files in nix store
+    nix.settings.auto-optimise-store = true;
     
     # Networking
     networking.hostName = "privacy-vm";
