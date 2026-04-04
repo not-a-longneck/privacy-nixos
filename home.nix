@@ -82,9 +82,100 @@
   };
 
   # ============================================================================
-  # HOME MANAGER
+  # INSTALL HOME MANAGER
   # ============================================================================
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
+
+
+  # ============================================================================
+  # INSTALL APPS
+  # ============================================================================
+
+  home.packages = with pkgs; [
+      tor-browser
+      vlc
+      spice-vdagent # for vm features
+      cifs-utils # for mounting network drives
+      veracrypt
+      kdePackages.kate
+      pyload-ng
+    ];
+
+  # Flatpaks
+  services.flatpak = {
+    enable = true;
+    packages = [
+      "org.jdownloader.JDownloader"
+    ];
+  };
+  # ============================================================================
+  # APP SETTINGS
+  # ============================================================================
+
+  # JDownloader Flatpak Permissions
+  services.flatpak.overrides."org.jdownloader.JDownloader".Context = {
+      filesystems = [
+        "xdg-download:rw"
+        "/tmp:rw"
+        "/mnt:rw"
+      ];
+      sockets = [ "x11" "wayland" "fallback-x11" ];
+      shared = [ "network" "ipc" ];
+      bus-talk = [ "org.freedesktop.NetworkManager" ];
+  };
+
+  # VLC Config
+  home.file.".config/vlc/vlcrc" = {
+    text = ''
+      [core]
+      metadata-network-access=0
+      show-hiddenfiles=1
+      playlist-tree=0
+      recursive=expand
+      random=1
+      [qt]
+      qt-privacy-ask=0
+      qt-notification=0
+      qt-video-autoresize=0
+  '';
+  force = true;
+  };
+
+
+  # Tor browser
+  home.file.".tor-project/TorBrowser/Data/Browser/profile.default/user.js" = {
+    text = ''
+      user_pref("javascript.enabled", false);
+      user_pref("extensions.torlauncher.prompt_at_startup", false);
+      user_pref("network.bootstrapped", true);
+      user_pref("intl.accept_languages", "en-US, en");
+      user_pref("intl.locale.requested", "en-US");
+      user_pref("browser.toolbars.bookmarks.visibility", "never");
+    '';
+  };
+
+
+  # ============================================================================
+  # SET DEFAULT APPS
+  # ============================================================================
+
+  xdg.enable = true;
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "video/mp4" = [ "vlc.desktop" ];
+      "video/x-matroska" = [ "vlc.desktop" ];
+      "video/webm" = [ "vlc.desktop" ];
+      "video/quicktime" = [ "vlc.desktop" ];
+      "video/x-msvideo" = [ "vlc.desktop" ]; # AVI
+      "video/mpeg" = [ "vlc.desktop" ];
+      "video/ogg" = [ "vlc.desktop" ];
+      "video/x-flv" = [ "vlc.desktop" ];       # This covers Flash video
+      "video/3gpp" = [ "vlc.desktop" ];        # This covers old phone videos
+    };
+  };
+
+
 }
