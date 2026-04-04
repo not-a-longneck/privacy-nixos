@@ -5,8 +5,6 @@ let
     CONFIG_DIR="/etc/nixos"
     cd $CONFIG_DIR
 
-nix-save = pkgs.writeShellScriptBin "nix-save" ''
-    cd /etc/nixos
     sudo git fetch origin main
     sudo git reset --hard origin/main
     sudo git add hardware-configuration.nix # ensure that hardware doesn't get deleted
