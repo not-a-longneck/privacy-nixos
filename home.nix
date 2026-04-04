@@ -107,7 +107,7 @@
   xdg.portal = {
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  # config.common.default = "*"; # Optional: sets a default for all interfaces
+  config.common.default = "*"; # Optional: sets a default for all interfaces
 };
   services.flatpak = {
     enable = true;
