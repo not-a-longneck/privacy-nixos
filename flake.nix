@@ -7,7 +7,6 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Add the nix-flatpak input
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
   };
 
@@ -22,10 +21,9 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.user = {
-            # Import both your home.nix and the flatpak module
-            imports = [
-              ./home.nix
-              nix-flatpak.homeManagerModules.nix-flatpak
+            imports = [ 
+              ./home.nix 
+              nix-flatpak.homeManagerModules.nix-flatpak 
             ];
           };
         }
