@@ -8,14 +8,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
+    # ADD THIS LINE:
+    impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-flatpak, ... }: {
+  outputs = { self, nixpkgs, home-manager, nix-flatpak, impermanence, ... }: {
     nixosConfigurations.privacy-vm = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./hardware-configuration.nix
         ./configuration.nix
+        # ADD THIS LINE:
+        impermanence.nixosModules.impermanence
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
