@@ -8,16 +8,19 @@ let
     cd $CONFIG_DIR
     sudo git pull origin main --rebase
 
-    echo "2. Staging local changes..."
+    # This updates your lock file for new inputs like nix-flatpak!
+    echo "2. Updating dependencies..."
+    sudo nix flake update
+
+    echo "3. Staging changes..."
     sudo git add .
 
-    echo "3. Rebuilding the system..."
+    echo "4. Rebuilding the system..."
     if sudo nixos-rebuild switch --flake "$CONFIG_DIR#privacy-vm"; then
         
-        # Get the new generation number for the commit message
         gen_num=$(readlink /nix/var/nix/profiles/system | cut -d- -f2)
         
-        echo "4. Saving and Syncing to GitHub..."
+        echo "5. Saving and Syncing to GitHub..."
         sudo git commit -m "Gen $gen_num: Update via nix-save $(date +'%Y-%m-%d %H:%M')"
         sudo git push origin main
         
